@@ -44,3 +44,30 @@ class Section {
 
         }
 }
+
+//Task 3 Create a Patron Class 
+class Patron {
+    constructor (name, borrowedBooks = []) {
+        this.name = name
+        this.borrowedBooks = borrowedBooks
+    }
+
+    borrowBook(book) { //Method to borrow book if it is available, and updating its status
+        if (book.isAvailable) {
+            this.borrowedBooks.push(book)
+            book.isAvailable = false
+        } else {
+            return "Book is not currently available"
+        }
+    }
+    returnBook(book) { //Method to return the book if it is borrowed
+        for (let b of this.borrowedBooks) {
+            if (b === book) {
+                book.isAvailable = true
+                this.borrowedBooks = this.borrowedBooks.filter(b => b !== book) 
+            } else {
+                return "Book is not borrowed by this patron"
+            }
+        }
+    }
+}
