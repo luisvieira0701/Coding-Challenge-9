@@ -43,6 +43,14 @@ class Section {
         }));
 
         }
+
+// Task 5 Calculate total available books in the section
+    calculateTotalBooksAvailable() {
+        return this.books.reduce((TotalAvailableBooks, books) => {
+                return `Number of available books: ${TotalAvailableBooks + (books.isAvailable ? 1 : 0)}`
+            }
+        )
+    }        
 }
 
 //Task 3 Create a Patron Class 
@@ -71,3 +79,24 @@ class Patron {
         }
     }
 }
+
+//Task 4- Create VIPPatron with inheritance from Patron
+class VIPPatron extends Patron{
+    constructor (name, borrowedBooks = [], priority = true) {
+        super (name, borrowedBooks)
+        this.priority = priority
+    }
+
+    borrowBook(book) {
+        const alreadyBorrowed = this.borrowedBooks.some(b => b === book)
+
+        if (book.isAvailable || alreadyBorrowed && this.priority) { //Adding book if available or if it is already owned by different patron
+            super.borrowBook(book) 
+            book.isAvailable = false
+            return `Book has been successfully borrowed` //Message to declare book has been borrowed
+        } else {
+           return "Book is not currently available" //Message to indicate book that VIPpatron tried to borrow is not available
+        }
+    }
+}
+
