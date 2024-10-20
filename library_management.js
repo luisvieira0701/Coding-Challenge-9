@@ -38,9 +38,10 @@ class Section {
 
     listBooks() {
         return this.books.map (book => ({ //Reiterating each book's title and availability
-            title: book.title,
-            available: book.isAvailable
-        }));
+        title: book.title,
+        available: book.isAvailable
+        }
+    ));
 
         }
 
@@ -93,10 +94,34 @@ class VIPPatron extends Patron{
         if (book.isAvailable || alreadyBorrowed && this.priority) { //Adding book if available or if it is already owned by different patron
             super.borrowBook(book) 
             book.isAvailable = false
-            return `Book has been successfully borrowed` //Message to declare book has been borrowed
+            return `Book has been successfully borrowed. If already borrowed,previous owner will be notified you have priority over it` //Message to declare book has been borrowed
         } else {
            return "Book is not currently available" //Message to indicate book that VIPpatron tried to borrow is not available
         }
     }
 }
+
+//Task 6- Create and Manage library sections and patrons
+const SciFi = new Section ("SciFi")
+const Religion = new Section ("Religion")
+
+const book1 = new Book ("Dune", "Frank Herbert", "9780316769170")
+const book2 = new Book ("Neuromancer", "William Gibson", "9781451632586")
+const book3 = new Book ("Holy Bible", "The Apostles", "9780060887896")
+
+SciFi.addBook(book1)
+SciFi.addBook(book2)
+Religion.addBook(book3)
+
+const regularPatron = new Patron ("Spongebob Squarepants")
+const vipPatron = new VIPPatron ("Squidward Tentacles")
+
+regularPatron.borrowBook(book1)
+vipPatron.borrowBook(book1)
+regularPatron.returnBook(book1)
+
+SciFi.listBooks()
+
+console.log(`Total available books in SciFi: ${SciFi.getAvailableBooks()}`)
+console.log(`Total available books in Religion: ${Religion.getAvailableBooks()}`)
 
