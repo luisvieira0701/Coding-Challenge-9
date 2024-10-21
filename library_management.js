@@ -22,9 +22,9 @@ class Book {
 
 //Task 2- Creating section class to manage books and availability
 class Section {
-    constructor (name, books = []) {
+    constructor (name) {
         this.name = name
-        this.books = books
+        this.books = []
     }
 
     addBook (book) {
@@ -32,41 +32,37 @@ class Section {
     }
 
     getAvailableBooks () { //Counting how many available books there are
-        let availableBooks = this.books.filter(book => book.isAvailable === true)
+        let availableBooks = this.books.filter(book => book.isAvailable)
         return availableBooks.length
     }
 
     listBooks() {
-        return this.books.map (book => ({ //Reiterating each book's title and availability
-        title: book.title,
-        available: book.isAvailable
-        }
-    ));
+        this.books.forEach(book => {
+            console.log(`${book.title}, Status = ${book.isAvailable}`)
+        }) //Reiterating each book's title and availability
 
-        }
+}
 
 // Task 5 Calculate total available books in the section
     calculateTotalBooksAvailable() {
-        return this.books.reduce((TotalAvailableBooks, books) => {
-                return `Number of available books: ${TotalAvailableBooks + (books.isAvailable ? 1 : 0)}`
-            }
-        )
+        this.books.filter(book => book.isAvailable).length
     }        
 }
 
 //Task 3 Create a Patron Class 
 class Patron {
-    constructor (name, borrowedBooks = []) {
+    constructor (name) {
         this.name = name
-        this.borrowedBooks = borrowedBooks
+        this.borrowedBooks = []
     }
 
     borrowBook(book) { //Method to borrow book if it is available, and updating its status
         if (book.isAvailable) {
             this.borrowedBooks.push(book)
             book.isAvailable = false
+            console.log(`${this.name} borrowed ${book.title}`)
         } else {
-            return "Book is not currently available"
+            console.log("Book is not currently available")
         }
     }
     returnBook(book) { //Method to return the book if it is borrowed
@@ -83,18 +79,16 @@ class Patron {
 
 //Task 4- Create VIPPatron with inheritance from Patron
 class VIPPatron extends Patron{
-    constructor (name, borrowedBooks = [], priority = true) {
-        super (name, borrowedBooks)
+    constructor (name, priority = true) {
+        super (name)
         this.priority = priority
     }
 
     borrowBook(book) {
-        const alreadyBorrowed = this.borrowedBooks.some(b => b === book)
-
-        if (book.isAvailable || alreadyBorrowed && this.priority) { //Adding book if available or if it is already owned by different patron
+        if (book.isAvailable || this.priority) { //Adding book if available or if it is already owned by different patron
             super.borrowBook(book) 
             book.isAvailable = false
-            return `Book has been successfully borrowed. If already borrowed,previous owner will be notified you have priority over it` //Message to declare book has been borrowed
+            console.log(`${this.name} has VIP status and is borrowing ${book.title}`) //Message to declare book has been borrowed
         } else {
            return "Book is not currently available" //Message to indicate book that VIPpatron tried to borrow is not available
         }
